@@ -5,6 +5,7 @@ import {
   Text,
   SafeAreaView, 
   TouchableOpacity,
+  ScrollView,
   StyleSheet } from 'react-native';
 
 
@@ -15,16 +16,6 @@ import { RNCamera} from 'react-native-camera';
 import  {PureComponent, useState} from 'react';
 
 
-const MyQRCodeScanner: React.FC = () => {
-  const onSuccess = (e: any) => {
-    console.log(e.data);
-    // e.data contains the QR code data
-  };
-
-  return (
-    <QRCodeScanner onRead={onSuccess} />
-  );
-};
 
 export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
@@ -91,6 +82,11 @@ export default function App() {
     // console.log(slicedKey[index]);
   };
 
+  interface Props {
+    circleColors: string[];
+    eraseKeySlice: (index: number) => void;
+  }
+
   
 
   const [barcode, setBarcode] = useState(null);
@@ -101,7 +97,7 @@ export default function App() {
   
   
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    multiply(3, 2).then(setResult);
   }, []);
 
   return (
@@ -112,19 +108,13 @@ export default function App() {
 
     // <View style={styles.container}>
     //   <Text>Result: {result}</Text>
-
-    //   <RNCamera
-    //   style={styles.rnCamera}
-    //   onBarCodeRead={handleBarcodeRead}>
-    //   </RNCamera>
-
-
-    // </View>
+    
 
     <View style={styles.screen}>
     <SafeAreaView style={styles.saveArea}>
       <View style={styles.topBar}>
-        <Text style={styles.topBarTitleText}>QRCode Merger</Text>
+        <Text style={styles.topBarTitleText}>Resultado C++: {result}</Text>
+        
       </View>
     </SafeAreaView>
 
@@ -156,7 +146,7 @@ export default function App() {
 
     
 
-    {/* <ScrollView
+    <ScrollView
       style={
         {
           maxHeight: 100,
@@ -171,12 +161,10 @@ export default function App() {
         <Text>NOT OK</Text>
       )
     }
-    </ScrollView> */}
+    </ScrollView>
     
 
   </View>    
-
-
   );
 }
 
@@ -214,7 +202,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#62d1bc',
     paddingVertical: 20,
     paddingHorizontal: 24,
-    paddingVertical: 15,
     marginVertical: 8,
     marginTop: 30
 
