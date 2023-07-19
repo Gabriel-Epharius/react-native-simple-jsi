@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { multiply } from 'react-native-simple-jsi';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-
+import { RNCamera} from 'react-native-camera';
 
 const MyQRCodeScanner: React.FC = () => {
   const onSuccess = (e: any) => {
@@ -19,6 +19,15 @@ const MyQRCodeScanner: React.FC = () => {
 export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
 
+  const handleBarcodeRead = (event) => {
+    if (event.data) {
+      // setBarcode(event.data);
+      // parseBarcode(event.data);
+      // console.log(event.data);
+      console.log(event.data);
+    }
+  };
+
   
   
   React.useEffect(() => {
@@ -28,7 +37,13 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Result: {result}</Text>
-      <MyQRCodeScanner/>
+
+      <RNCamera
+      style={styles.rnCamera}
+      onBarCodeRead={handleBarcodeRead}>
+      </RNCamera>
+
+      
     </View>
   );
 }
@@ -44,4 +59,10 @@ const styles = StyleSheet.create({
     height: 60,
     marginVertical: 20,
   },
+  rnCamera: {
+    flex: 1,
+    width: '60%',
+    alignSelf: 'center',
+    marginBottom: 50,
+  }
 });
