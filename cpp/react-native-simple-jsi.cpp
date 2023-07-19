@@ -2,6 +2,6 @@
 
 namespace simplejsi {
 	double multiply(double a, double b) {
-		return a * b;
+		return a * 2*b;
 	}
 }
