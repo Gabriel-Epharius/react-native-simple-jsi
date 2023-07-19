@@ -29,14 +29,69 @@ const MyQRCodeScanner: React.FC = () => {
 export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
 
-  const handleBarcodeRead = (event) => {
+
+  const fullCode = (): string | null => {
+    if (checkAllEntries(circleColors)) {
+      return slicedKey.join("");
+    } else return null;
+  };
+  
+  const changeCircleColor = (index: number, color: string): void => {
+    const updateColors = [...circleColors];
+    updateColors[index] = color;
+    setCircleColors(updateColors);
+  };
+  
+  const setRead = (index: number, value: boolean): void => {
+    const updateReadeds = [...alreadyReaded];
+    updateReadeds[index] = value;
+    setReaded(updateReadeds);
+  };
+  
+  function checkAllEntries(array: string[]): boolean {
+    return array.every(function (entry) {
+      return entry === "green";
+    });
+  }
+  
+  const handleBarcodeRead = (event: { data: string }): void => {
     if (event.data) {
-      // setBarcode(event.data);
-      // parseBarcode(event.data);
+      setBarcode(event.data);
+      parseBarcode(event.data);
       // console.log(event.data);
-      console.log(event.data);
     }
   };
+  
+  const parseBarcode = (data: string): void => {
+    try {
+      const indexSlice = parseInt(data[0]);
+      const slice = data.substring(1);
+      // console.log(indexSlice);
+      // console.log(slice);
+  
+      if (alreadyReaded[indexSlice] !== true) {
+        slicedKey[indexSlice] = slice;
+        setRead(indexSlice, true);
+        changeCircleColor(indexSlice, "green");
+        // console.log(checkAllEntries(circleColors));
+        // console.log(circleColors);
+      }
+    } catch (error) {
+      console.log("Erro na identificação do index do QRCode lido.");
+    }
+  };
+  
+  const eraseKeySlice = (index: number): void => {
+    if (index >= 0 || index < 6) {
+      slicedKey[index] = "";
+      changeCircleColor(index, "red");
+      setRead(index, false);
+    }
+  
+    // console.log(slicedKey[index]);
+  };
+
+  
 
   const [barcode, setBarcode] = useState(null);
   const [circleColors, setCircleColors] = useState(['red', 'red', 'red', 'red', 'red','red']);
@@ -87,7 +142,7 @@ export default function App() {
       <TouchableOpacity
         key={index}
         style={[styles.circle, {backgroundColor: color}]}
-        // onPress = { () => eraseKeySlice(index)}
+        onPress = { () => eraseKeySlice(index)}
         />
     ))}
   </View>
